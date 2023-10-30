@@ -64,16 +64,20 @@ public final class Heap<T extends Comparable> implements IHeap<T> {
             Node<T> parent = this.parent;
             if (parent.isLeftChild()) {
                 this.asLeftChild(parent.parent);
+                System.out.println("swap with LEFT"+parent.value + parent.parent.value);
             } else if (parent.isRightChild()) {
                 this.asRightChild(parent.parent);
+                System.out.println("swap with RIGHT"+parent.value + parent.parent.value);
             } else {
                 this.parent = null;
+                System.out.println("parent is now null");
             }
             if (isLeft) {
                 swapUpAsLeft(parent);
-                //write(parent.value + " swap", writer);
+                System.out.println("swap PARENT and LEFT"+parent.value + parent.left.value);
             } else {
                 swapUpAsRight(parent);
+                System.out.println("swap PARENT and RIGHT"+parent.value+ parent.right.value);
             }
         }
 
@@ -220,25 +224,36 @@ public final class Heap<T extends Comparable> implements IHeap<T> {
     @Override
     public T removeMin() {
         if (this.head == null) {
+            System.out.println("heap already EMPTY");
             return null;
         } else {
             T rm = this.head.value;
+            System.out.println("head.value is "+rm);
             Node<T> tmp_last = this.last;
             if (this.last.isRoot()) {
+                System.out.println("heap is now EMPTY");
                 clear();
                 return rm;
             } else if (this.last.isRightChild()) {
+                System.out.println("last is RIGHT child");
                 this.last = this.last.parent.left;
+                System.out.println("RIGHT disconnect with its parent"+last.value);
                 tmp_last.parent.right = null;
             } else if (this.last.isLeftMostLeaf()) {
                 this.last = this.head.rightMostLeaf();
+                System.out.println("head at the RIGHTMOST");
+                System.out.println("LEFT disconnect with its parent"+last.value);
                 tmp_last.parent.left = null;
             } else {
                 Node<T> iter = this.last.parent;
+                System.out.println("disconnect with its parent");
                 while (iter.isLeftChild()) {
                     iter = iter.parent;
+                    System.out.println("iter is "+ iter + " " + iter.isLeftChild());
                 }
+
                 this.last = iter.parent.left.rightMostLeaf();
+                System.out.println("last is" + last);
                 tmp_last.parent.left = null;
             }
             tmp_last.parent = null;
